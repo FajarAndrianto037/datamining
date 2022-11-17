@@ -1,0 +1,62 @@
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/dist-packages/jupyter_cache/executors/utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "/usr/local/lib/python3.7/dist-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/usr/local/lib/python3.7/dist-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/usr/local/lib/python3.7/dist-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 587, in run_until_complete
+    return future.result()
+  File "/usr/local/lib/python3.7/dist-packages/nbclient/client.py", line 664, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "/usr/local/lib/python3.7/dist-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/usr/local/lib/python3.7/dist-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+!nohup streamlit run app.py --server.port 80 & 
+url = ngrok.connect(port = '80')
+print(url)
+------------------
+
+[0;31m[0m
+[0;31mPyngrokNgrokError[0mTraceback (most recent call last)
+[0;32m<ipython-input-6-61ff560307a7>[0m in [0;36m<module>[0;34m[0m
+[1;32m      1[0m [0mget_ipython[0m[0;34m([0m[0;34m)[0m[0;34m.[0m[0msystem[0m[0;34m([0m[0;34m'nohup streamlit run app.py --server.port 80 & '[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m----> 2[0;31m [0murl[0m [0;34m=[0m [0mngrok[0m[0;34m.[0m[0mconnect[0m[0;34m([0m[0mport[0m [0;34m=[0m [0;34m'80'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      3[0m [0mprint[0m[0;34m([0m[0murl[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.7/dist-packages/pyngrok/ngrok.py[0m in [0;36mconnect[0;34m(addr, proto, name, pyngrok_config, **options)[0m
+[1;32m    249[0m     [0moptions[0m[0;34m.[0m[0mupdate[0m[0;34m([0m[0mconfig[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    250[0m [0;34m[0m[0m
+[0;32m--> 251[0;31m     [0mapi_url[0m [0;34m=[0m [0mget_ngrok_process[0m[0;34m([0m[0mpyngrok_config[0m[0;34m)[0m[0;34m.[0m[0mapi_url[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    252[0m [0;34m[0m[0m
+[1;32m    253[0m     [0mlogger[0m[0;34m.[0m[0mdebug[0m[0;34m([0m[0;34m"Creating tunnel with options: {}"[0m[0;34m.[0m[0mformat[0m[0;34m([0m[0moptions[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.7/dist-packages/pyngrok/ngrok.py[0m in [0;36mget_ngrok_process[0;34m(pyngrok_config)[0m
+[1;32m    160[0m     [0minstall_ngrok[0m[0;34m([0m[0mpyngrok_config[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    161[0m [0;34m[0m[0m
+[0;32m--> 162[0;31m     [0;32mreturn[0m [0mprocess[0m[0;34m.[0m[0mget_process[0m[0;34m([0m[0mpyngrok_config[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    163[0m [0;34m[0m[0m
+[1;32m    164[0m [0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.7/dist-packages/pyngrok/process.py[0m in [0;36mget_process[0;34m(pyngrok_config)[0m
+[1;32m    293[0m         [0;32mreturn[0m [0m_current_processes[0m[0;34m[[0m[0mpyngrok_config[0m[0;34m.[0m[0mngrok_path[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
+[1;32m    294[0m [0;34m[0m[0m
+[0;32m--> 295[0;31m     [0;32mreturn[0m [0m_start_process[0m[0;34m([0m[0mpyngrok_config[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    296[0m [0;34m[0m[0m
+[1;32m    297[0m [0;34m[0m[0m
+
+[0;32m/usr/local/lib/python3.7/dist-packages/pyngrok/process.py[0m in [0;36m_start_process[0;34m(pyngrok_config)[0m
+[1;32m    464[0m             raise PyngrokNgrokError("The ngrok process errored on start: {}.".format(ngrok_process.startup_error),
+[1;32m    465[0m                                     [0mngrok_process[0m[0;34m.[0m[0mlogs[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 466[0;31m                                     ngrok_process.startup_error)
+[0m[1;32m    467[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    468[0m             [0;32mraise[0m [0mPyngrokNgrokError[0m[0;34m([0m[0;34m"The ngrok process was unable to start."[0m[0;34m,[0m [0mngrok_process[0m[0;34m.[0m[0mlogs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mPyngrokNgrokError[0m: The ngrok process errored on start: Your account is limited to 1 simultaneous ngrok agent session.\nActive ngrok agent sessions in region 'us':\n  - ts_2HftEaSHPiI9mAZFB7e9dnGWvQm (35.221.150.132)\r\n\r\nERR_NGROK_108\r\n.
+PyngrokNgrokError: The ngrok process errored on start: Your account is limited to 1 simultaneous ngrok agent session.\nActive ngrok agent sessions in region 'us':\n  - ts_2HftEaSHPiI9mAZFB7e9dnGWvQm (35.221.150.132)\r\n\r\nERR_NGROK_108\r\n.
+
