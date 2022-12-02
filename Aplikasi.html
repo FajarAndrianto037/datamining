@@ -370,12 +370,51 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Projek Aplikasi
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-regression">
+   model regression
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#knn">
+   KNN
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#naive-bayes">
+   Naive Bayes
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -387,6 +426,34 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Projek Aplikasi
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-regression">
+   model regression
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#knn">
+   KNN
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#naive-bayes">
+   Naive Bayes
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -398,351 +465,590 @@ title="Print to PDF"
 <h1>Projek Aplikasi<a class="headerlink" href="#projek-aplikasi" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">streamlit</span> <span class="o">-</span><span class="n">q</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%writefile</span> app.py
-<span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">f1_score</span>
-<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_classification</span>
-<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
-
-<span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;PROJEK DATA MINING&quot;</span><span class="p">)</span>
-<span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Fajar Andrianto || 200411100037 || Project UAS&quot;</span><span class="p">)</span>
-<span class="n">import_data</span><span class="p">,</span> <span class="n">preporcessing</span><span class="p">,</span> <span class="n">modeling</span><span class="p">,</span> <span class="n">implementation</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tabs</span><span class="p">([</span><span class="s2">&quot;Import Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Prepocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;Modeling&quot;</span><span class="p">,</span> <span class="s2">&quot;Implementation&quot;</span><span class="p">])</span>
-
-<span class="k">with</span> <span class="n">import_data</span><span class="p">:</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;# Import Data&quot;&quot;&quot;</span><span class="p">)</span>
-    <span class="n">uploaded_files</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">file_uploader</span><span class="p">(</span><span class="s2">&quot;Upload file CSV&quot;</span><span class="p">,</span> <span class="n">accept_multiple_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">uploaded_file</span> <span class="ow">in</span> <span class="n">uploaded_files</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">uploaded_file</span><span class="p">)</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Nama File Anda = &quot;</span><span class="p">,</span> <span class="n">uploaded_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-<span class="k">with</span> <span class="n">preporcessing</span><span class="p">:</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;# Preprocessing&quot;&quot;&quot;</span><span class="p">)</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-    <span class="c1"># create a dataframe with all training data except the target column</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;risk_rating&quot;</span><span class="p">])</span>
-
-    <span class="c1"># # check that the target variable has been removed</span>
-    <span class="n">X</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-
-    <span class="n">split_overdue_X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;rata_rata_overdue&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;overdue&quot;</span><span class="p">)</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">split_overdue_X</span><span class="p">)</span>
-
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="s2">&quot;rata_rata_overdue&quot;</span><span class="p">)</span>
-
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;risk_rating&quot;</span><span class="p">]</span>
-    <span class="c1"># </span>
-    <span class="n">KPR_status</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;kpr_aktif&quot;</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;KPR&quot;</span><span class="p">)</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">KPR_status</span><span class="p">)</span>
-
-    <span class="c1"># remove &quot;rata_rata_overdue&quot; feature</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="s2">&quot;kpr_aktif&quot;</span><span class="p">)</span>
-
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;menampilkan dataframe yang rata-rata overdue, risk rating dan kpr aktif sudah di drop&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; ## Normalisasi&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Normalize feature &#39;pendapatan_setahun_juta&#39;, &#39;durasi_pinjaman_bulan&#39;, &#39;jumlah_tanggungan&#39;&quot;</span><span class="p">)</span>
-    <span class="n">old_normalize_feature_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pendapatan_setahun_juta&#39;</span><span class="p">,</span> <span class="s1">&#39;durasi_pinjaman_bulan&#39;</span><span class="p">,</span> <span class="s1">&#39;jumlah_tanggungan&#39;</span><span class="p">]</span>
-    <span class="n">new_normalized_feature_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;norm_pendapatan_setahun_juta&#39;</span><span class="p">,</span> <span class="s1">&#39;norm_durasi_pinjaman_bulan&#39;</span><span class="p">,</span> <span class="s1">&#39;norm_jumlah_tanggungan&#39;</span><span class="p">]</span>
-    <span class="n">normalize_feature</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">old_normalize_feature_labels</span><span class="p">]</span>
-
-    <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">normalize_feature</span><span class="p">)</span>
-
-    <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
-
-    <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">normalize_feature</span><span class="p">)</span>
-
-    <span class="n">normalized_feature</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">normalize_feature</span><span class="p">)</span>
-
-    <span class="n">normalized_feature_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">normalized_feature</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">new_normalized_feature_labels</span><span class="p">)</span>
-
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;data setelah dinormalisasi&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">normalized_feature_df</span><span class="p">)</span>
-
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="n">old_normalize_feature_labels</span><span class="p">)</span>
-
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">normalized_feature_df</span><span class="p">)</span>
-
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
-
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;dataframe X baru&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-
-    <span class="n">subject_lables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Unnamed: 0&quot;</span><span class="p">,</span>  <span class="s2">&quot;kode_kontrak&quot;</span><span class="p">]</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="n">subject_lables</span><span class="p">)</span>
-
-    <span class="c1"># percent_amount_of_test_data = / HUNDRED_PERCENT</span>
-    <span class="n">percent_amount_of_test_data</span> <span class="o">=</span> <span class="mf">0.3</span>
-
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;dataframe X baru yang tidak ada fitur/kolom unnamed: 0 dan kode kontrak&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Hitung Data&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Pisahkan kolom risk rating dari data frame&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Ambil kolom &#39;risk rating&#39; sebagai target kolom untuk kategori kelas&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;- Pisahkan data latih dengan data tes&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;            Spliting Data</span>
-
-<span class="s2">                data latih (nilai data)</span>
-<span class="s2">                X_train </span>
-
-<span class="s2">                data tes (nilai data)</span>
-<span class="s2">                X_test </span>
-
-<span class="s2">                data latih (kelas data)</span>
-<span class="s2">                y_train</span>
-
-<span class="s2">                data tes (kelas data)</span>
-<span class="s2">                y_test&quot;&quot;&quot;</span><span class="p">)</span>
-
-    <span class="c1"># separate target </span>
-
-    <span class="c1"># values</span>
-    <span class="n">matrices_X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-    <span class="c1"># classes</span>
-    <span class="n">matrices_Y</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-    <span class="n">X_1</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">Y_1</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-    <span class="c1"># X_train, X_test, y_train, y_test = train_test_split(matrices_X, matrices_Y, test_size = percent_amount_of_test_data, random_state=0)</span>
-    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_1</span><span class="p">,</span> <span class="n">Y_1</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="n">percent_amount_of_test_data</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Menampilkan Y_1&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Y_1</span><span class="p">)</span>
-    
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Menampilkan X_1&quot;</span><span class="p">)</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">X_1</span><span class="p">)</span>
-    <span class="c1">### Dictionary to store model and its accuracy</span>
-
-    <span class="n">model_accuracy</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-
-    <span class="c1">### Dictionary to store model and its precision</span>
-
-    <span class="n">model_precision</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-
-    <span class="c1">### Dictionary to store model and its recall</span>
-
-    <span class="n">model_recall</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-
-
-<span class="k">with</span> <span class="n">modeling</span><span class="p">:</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;# Modeling&quot;&quot;&quot;</span><span class="p">)</span>
-    <span class="n">naive_bayes</span><span class="p">,</span> <span class="n">bagging_naive_bayes</span><span class="p">,</span> <span class="n">decision_tree</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">tabs</span><span class="p">([</span><span class="s2">&quot;Naive Bayes&quot;</span><span class="p">,</span> <span class="s2">&quot;Bagging Naive Bayes&quot;</span><span class="p">,</span> <span class="s2">&quot;Decision Tree&quot;</span><span class="p">])</span>
-
-    <span class="k">with</span> <span class="n">naive_bayes</span><span class="p">:</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Naive Bayes&quot;</span><span class="p">)</span>
-        <span class="n">naive_bayes_classifier</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
-        <span class="n">naive_bayes_classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-        <span class="n">Y_pred_nb</span> <span class="o">=</span> <span class="n">naive_bayes_classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-
-        <span class="c1">### Making the confusion matrix</span>
-        <span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Y_pred_nb</span><span class="p">)</span>
-
-
-        <span class="c1">### Printing the accuracy, precision, and recall of the model</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Confusion matrix for Gaussian Naive Bayes</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">cm</span><span class="p">)</span>
-
-        <span class="n">naive_bayes_accuracy</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Y_pred_nb</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">model_accuracy</span><span class="p">[</span><span class="s1">&#39;Gaussian Naive Bayes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">naive_bayes_accuracy</span>
-
-        <span class="n">naive_bayes_precision</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Y_pred_nb</span><span class="p">,</span> <span class="n">average</span> <span class="o">=</span> <span class="s1">&#39;weighted&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">model_precision</span><span class="p">[</span><span class="s1">&#39;Gaussian Naive Bayes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">naive_bayes_precision</span>
-
-        <span class="n">naive_bayes_recall</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Y_pred_nb</span><span class="p">,</span> <span class="n">average</span> <span class="o">=</span> <span class="s1">&#39;weighted&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">model_recall</span><span class="p">[</span><span class="s1">&#39;Gaussian Naive Bayes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">naive_bayes_recall</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The accuracy of this model is </span><span class="si">{}</span><span class="s1"> %.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">naive_bayes_accuracy</span><span class="p">))</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The precision of this model is </span><span class="si">{}</span><span class="s1"> %.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">naive_bayes_precision</span><span class="p">))</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The recall of this model is </span><span class="si">{}</span><span class="s1"> %.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">naive_bayes_recall</span><span class="p">))</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Menampilkan prediksi dengan Naive Bayes&quot;</span><span class="p">)</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Y_pred_nb</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="n">bagging_naive_bayes</span><span class="p">:</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Bagging Naive Bayes&quot;</span><span class="p">)</span>
-        <span class="n">clf</span> <span class="o">=</span> <span class="n">BaggingClassifier</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">GaussianNB</span><span class="p">(),</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-        <span class="n">rsc</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Naive Bayes&#39;</span><span class="p">]</span>
-        <span class="n">Bayes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rsc</span><span class="p">,</span><span class="n">columns</span> <span class="o">=</span> <span class="n">c</span><span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Menampilkan hasil prediksi dengan esamble naive bayes&quot;</span><span class="p">)</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Bayes</span><span class="p">)</span>
-
-        <span class="n">bagging_Bayes</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Bayes</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The accuracy of this model is Bagging Naive Bayes </span><span class="si">{}</span><span class="s1"> %.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bagging_Bayes</span><span class="p">))</span>
-    
-    <span class="k">with</span> <span class="n">decision_tree</span><span class="p">:</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Decision Tree&quot;</span><span class="p">)</span>
-        <span class="c1">### Applying Decision Tree Classification model</span>
-
-        <span class="n">decision_tree_classifier</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">criterion</span> <span class="o">=</span> <span class="s1">&#39;entropy&#39;</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">27</span><span class="p">)</span>
-        <span class="n">decision_tree_classifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-
-
-        <span class="c1">### Predicting the Test set results</span>
-
-        <span class="n">Y_pred_dc</span> <span class="o">=</span> <span class="n">decision_tree_classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-        <span class="c1">### Making the confusion matrix</span>
-        <span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Y_pred_dc</span><span class="p">)</span>
-
-        <span class="c1">### Printing the accuracy, precision, and recall of the model</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Confusion matrix for Decision Tree</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">cm</span><span class="p">)</span>
-
-        <span class="n">decision_tree_accuracy</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Y_pred_dc</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">model_accuracy</span><span class="p">[</span><span class="s1">&#39;Decision Tree&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decision_tree_accuracy</span>
-
-        <span class="n">decision_tree_precision</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Y_pred_dc</span><span class="p">,</span> <span class="n">average</span> <span class="o">=</span> <span class="s1">&#39;weighted&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">model_precision</span><span class="p">[</span><span class="s1">&#39;Decision Tree&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decision_tree_precision</span>
-
-        <span class="n">decision_tree_recall</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">Y_pred_dc</span><span class="p">,</span> <span class="n">average</span> <span class="o">=</span> <span class="s1">&#39;weighted&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">model_recall</span><span class="p">[</span><span class="s1">&#39;Decision Tree&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decision_tree_recall</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The accuracy of this model is </span><span class="si">{}</span><span class="s1"> %.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">decision_tree_accuracy</span><span class="p">))</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The precision of this model is </span><span class="si">{}</span><span class="s1"> %.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">decision_tree_precision</span><span class="p">))</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;The recall of this model is </span><span class="si">{}</span><span class="s1"> %.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">decision_tree_recall</span><span class="p">))</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Menampilkan hasil prediksi dengan Decision Tree&quot;</span><span class="p">)</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Y_pred_dc</span><span class="p">)</span>
-
-
-
-    <span class="n">FIRST_IDX</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="k">with</span> <span class="n">implementation</span><span class="p">:</span>
-    <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Implementation&quot;</span><span class="p">)</span>
-    <span class="n">nama_nasabah</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_input</span><span class="p">(</span><span class="s1">&#39;Masukkan Nama Nasabah&#39;</span><span class="p">)</span>
-    <span class="n">pendapatan_per_tahun</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">number_input</span><span class="p">(</span><span class="s1">&#39;Masukkan pendapatan pertahun&#39;</span><span class="p">)</span>
-    <span class="n">durasi_peminjaman</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">number_input</span><span class="p">(</span><span class="s1">&#39;Masukkan Durasi Peminjaman&#39;</span><span class="p">)</span>
-    <span class="n">jumlah_tanggungan</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">number_input</span><span class="p">(</span><span class="s1">&#39;Masukkan Jumlah Tanggungan&#39;</span><span class="p">)</span>
-
-    <span class="n">clf</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
-    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">matrices_X</span><span class="p">,</span> <span class="n">matrices_Y</span><span class="p">)</span>
-    <span class="n">clf_pf</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
-    <span class="n">clf_pf</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">matrices_X</span><span class="p">,</span> <span class="n">matrices_Y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">matrices_Y</span><span class="p">))</span>
-
-    <span class="n">cek_rasio_NB</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s1">&#39;Cek Risk Ratio dengan Naive Bayes&#39;</span><span class="p">)</span>
-    <span class="n">cek_rasio_BNB</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s1">&#39;Cek Risk Ratio dengan Bagging Naive Bayes&#39;</span><span class="p">)</span>
-    <span class="n">cek_rasio_DC</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s1">&#39;Cek Risk Ratio dengan Decision Tree&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">cek_rasio_NB</span><span class="p">:</span>
-        <span class="n">result_test_naive_bayes</span> <span class="o">=</span> <span class="n">clf_pf</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">1</span><span class="p">,</span>	<span class="n">pendapatan_per_tahun</span><span class="p">,</span>	<span class="n">durasi_peminjaman</span><span class="p">,</span> <span class="n">jumlah_tanggungan</span><span class="p">]])[</span><span class="n">FIRST_IDX</span><span class="p">]</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Customer Name : &quot;</span><span class="p">,</span> <span class="n">nama_nasabah</span><span class="p">,</span>  <span class="s2">&quot;has risk rating&quot;</span><span class="p">,</span> <span class="n">result_test_naive_bayes</span> <span class="p">,</span><span class="s2">&quot;based on Bagging Gaussian Naive Bayes model&quot;</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">cek_rasio_BNB</span><span class="p">:</span>
-        <span class="n">result_test_naive_bayes_bagging</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">1</span><span class="p">,</span>	<span class="n">pendapatan_per_tahun</span><span class="p">,</span>	<span class="n">durasi_peminjaman</span><span class="p">,</span> <span class="n">jumlah_tanggungan</span><span class="p">]])[</span><span class="n">FIRST_IDX</span><span class="p">]</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Customer Name : &quot;</span><span class="p">,</span> <span class="n">nama_nasabah</span><span class="p">,</span>  <span class="s2">&quot;has risk rating&quot;</span><span class="p">,</span> <span class="n">result_test_naive_bayes_bagging</span> <span class="p">,</span><span class="s2">&quot;based on Bagging Gaussian Naive Bayes model&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">cek_rasio_DC</span><span class="p">:</span>
-        <span class="n">result_test_decision_tree</span> <span class="o">=</span> <span class="n">decision_tree_classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">0</span><span class="p">,</span>	<span class="mi">1</span><span class="p">,</span>	<span class="n">pendapatan_per_tahun</span><span class="p">,</span>	<span class="n">durasi_peminjaman</span><span class="p">,</span> <span class="n">jumlah_tanggungan</span><span class="p">]])[</span><span class="n">FIRST_IDX</span><span class="p">]</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Customer Name : &quot;</span><span class="p">,</span> <span class="n">nama_nasabah</span><span class="p">,</span>  <span class="s2">&quot;has risk rating&quot;</span><span class="p">,</span> <span class="n">result_test_decision_tree</span> <span class="p">,</span><span class="s2">&quot;based on Bagging Gaussian Naive Bayes model&quot;</span><span class="p">)</span>
-            
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/FajarAndrianto037/data/main/Heart_Disease_Dataset.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting app.py
-</pre></div>
+<div class="output text_html">
+  <div id="df-c26758d8-4122-4843-b84c-4d1cffea0ad6">
+    <div class="colab-df-container">
+      <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>sex</th>
+      <th>cp</th>
+      <th>trestbps</th>
+      <th>chol</th>
+      <th>fbs</th>
+      <th>restecg</th>
+      <th>thalach</th>
+      <th>exang</th>
+      <th>oldpeak</th>
+      <th>slope</th>
+      <th>ca</th>
+      <th>thal</th>
+      <th>target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>63</td>
+      <td>1</td>
+      <td>3</td>
+      <td>145</td>
+      <td>233</td>
+      <td>1</td>
+      <td>0</td>
+      <td>150</td>
+      <td>0</td>
+      <td>2.3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>37</td>
+      <td>1</td>
+      <td>2</td>
+      <td>130</td>
+      <td>250</td>
+      <td>0</td>
+      <td>1</td>
+      <td>187</td>
+      <td>0</td>
+      <td>3.5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>41</td>
+      <td>0</td>
+      <td>1</td>
+      <td>130</td>
+      <td>204</td>
+      <td>0</td>
+      <td>0</td>
+      <td>172</td>
+      <td>0</td>
+      <td>1.4</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>56</td>
+      <td>1</td>
+      <td>1</td>
+      <td>120</td>
+      <td>236</td>
+      <td>0</td>
+      <td>1</td>
+      <td>178</td>
+      <td>0</td>
+      <td>0.8</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>57</td>
+      <td>0</td>
+      <td>0</td>
+      <td>120</td>
+      <td>354</td>
+      <td>0</td>
+      <td>1</td>
+      <td>163</td>
+      <td>1</td>
+      <td>0.6</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
 </div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-c26758d8-4122-4843-b84c-4d1cffea0ad6')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+  </svg>
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-c26758d8-4122-4843-b84c-4d1cffea0ad6 button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-c26758d8-4122-4843-b84c-4d1cffea0ad6');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div>
+</div></div>
 </div>
-</div>
+<ul class="simple">
+<li><p>Data contains;</p></li>
+<li><p>age - age in years</p></li>
+<li><p>sex - (1 = male; 0 = female)</p></li>
+<li><p>cp - chest pain type</p></li>
+<li><p>trestbps - resting blood pressure (in mm Hg on admission to the hospital)</p></li>
+<li><p>chol - serum cholestoral in mg/dl</p></li>
+<li><p>fbs - (fasting blood sugar &gt; 120 mg/dl) (1 = true; 0 = false)</p></li>
+<li><p>restecg - resting electrocardiographic results</p></li>
+<li><p>thalach - maximum heart rate achieved</p></li>
+<li><p>exang - exercise induced angina (1 = yes; 0 = no)</p></li>
+<li><p>oldpeak - ST depression induced by exercise relative to rest</p></li>
+<li><p>slope - the slope of the peak exercise ST segment</p></li>
+<li><p>ca - number of major vessels (0-3) colored by flourosopy</p></li>
+<li><p>thal - 3 = normal; 6 = fixed defect; 7 = reversable defect</p></li>
+<li><p>target - have disease or not (1=yes, 0=no)</p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>  <span class="o">!</span> pip install pyngrok
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">countNoDisease</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">countHaveDisease</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Persentase pasien tidak memiliki penyakit jantung: </span><span class="si">{:.2f}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">countNoDisease</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Persentase pasien memiliki penyakit jantung: </span><span class="si">{:.2f}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">countHaveDisease</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="p">))</span><span class="o">*</span><span class="mi">100</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/
-Requirement already satisfied: pyngrok in /usr/local/lib/python3.7/dist-packages (5.1.0)
-Requirement already satisfied: PyYAML in /usr/local/lib/python3.7/dist-packages (from pyngrok) (6.0)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1    165
+0    138
+Name: target, dtype: int64
+</pre></div>
+</div>
+<img alt="_images/Aplikasi_4_1.png" src="_images/Aplikasi_4_1.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Persentase pasien tidak memiliki penyakit jantung: 45.54%
+Persentase pasien memiliki penyakit jantung: 54.46%
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyngrok</span> <span class="kn">import</span> <span class="n">ngrok</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span><span class="o">.</span><span class="n">set_auth_token</span><span class="p">(</span><span class="s2">&quot;2HebSUmNqEcfDQEXlwRxCzmYbIw_4GpiBQ3GGJXmY1V3WwTaN&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>nohup streamlit run app.py --server.port <span class="m">80</span> <span class="p">&amp;</span> 
-<span class="n">url</span> <span class="o">=</span> <span class="n">ngrok</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">port</span> <span class="o">=</span> <span class="s1">&#39;80&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nohup: appending output to &#39;nohup.out&#39;
+<div class="output text_html">
+  <div id="df-f545cf47-99c7-436d-bdd8-0b36781a36a9">
+    <div class="colab-df-container">
+      <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>sex</th>
+      <th>cp</th>
+      <th>trestbps</th>
+      <th>chol</th>
+      <th>fbs</th>
+      <th>restecg</th>
+      <th>thalach</th>
+      <th>exang</th>
+      <th>oldpeak</th>
+      <th>slope</th>
+      <th>ca</th>
+      <th>thal</th>
+    </tr>
+    <tr>
+      <th>target</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>56.601449</td>
+      <td>0.826087</td>
+      <td>0.478261</td>
+      <td>134.398551</td>
+      <td>251.086957</td>
+      <td>0.159420</td>
+      <td>0.449275</td>
+      <td>139.101449</td>
+      <td>0.550725</td>
+      <td>1.585507</td>
+      <td>1.166667</td>
+      <td>1.166667</td>
+      <td>2.543478</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>52.496970</td>
+      <td>0.563636</td>
+      <td>1.375758</td>
+      <td>129.303030</td>
+      <td>242.230303</td>
+      <td>0.139394</td>
+      <td>0.593939</td>
+      <td>158.466667</td>
+      <td>0.139394</td>
+      <td>0.583030</td>
+      <td>1.593939</td>
+      <td>0.363636</td>
+      <td>2.121212</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+      <button class="colab-df-convert" onclick="convertToInteractive('df-f545cf47-99c7-436d-bdd8-0b36781a36a9')"
+              title="Convert this dataframe to an interactive table."
+              style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M0 0h24v24H0V0z" fill="none"/>
+    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
+  </svg>
+      </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+      <script>
+        const buttonEl =
+          document.querySelector('#df-f545cf47-99c7-436d-bdd8-0b36781a36a9 button.colab-df-convert');
+        buttonEl.style.display =
+          google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+        async function convertToInteractive(key) {
+          const element = document.querySelector('#df-f545cf47-99c7-436d-bdd8-0b36781a36a9');
+          const dataTable =
+            await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                     [key], {});
+          if (!dataTable) return;
+
+          const docLinkHtml = 'Like what you see? Visit the ' +
+            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+            + ' to learn more about interactive tables.';
+          element.innerHTML = '';
+          dataTable['output_type'] = 'display_data';
+          await google.colab.output.renderOutput(dataTable, element);
+          const docLink = document.createElement('div');
+          docLink.innerHTML = docLinkHtml;
+          element.appendChild(docLink);
+        }
+      </script>
+    </div>
+  </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="p">,</span><span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Frekuensi penyakit jantung berdasarkan umur&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;heartDiseaseAndAges.png&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR:pyngrok.process.ngrok:t=2022-11-17T12:45:49+0000 lvl=eror msg=&quot;failed to auth&quot; obj=tunnels.session err=&quot;Your account is limited to 1 simultaneous ngrok agent session.\nActive ngrok agent sessions in region &#39;us&#39;:\n  - ts_2HftEaSHPiI9mAZFB7e9dnGWvQm (35.221.150.132)\r\n\r\nERR_NGROK_108\r\n&quot;
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Aplikasi_6_0.png" src="_images/Aplikasi_6_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="o">==</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">thalach</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="o">==</span><span class="mi">1</span><span class="p">)],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="o">==</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">thalach</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="o">==</span><span class="mi">0</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;Disease&quot;</span><span class="p">,</span> <span class="s2">&quot;Not Disease&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Maximum Heart Rate&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="ne">PyngrokNgrokError</span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">6</span><span class="o">-</span><span class="mi">61</span><span class="n">ff560307a7</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;nohup streamlit run app.py --server.port 80 &amp; &#39;</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">url</span> <span class="o">=</span> <span class="n">ngrok</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">port</span> <span class="o">=</span> <span class="s1">&#39;80&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Aplikasi_7_0.png" src="_images/Aplikasi_7_0.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="model-regression">
+<h1>model regression<a class="headerlink" href="#model-regression" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">values</span>
+<span class="n">x_data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;target&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Normalize</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_data</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x_data</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x_data</span><span class="p">))</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#transpose matrices</span>
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">T</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">T</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">T</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accuracies</span> <span class="o">=</span> <span class="p">{}</span>
 
-<span class="nn">/usr/local/lib/python3.7/dist-packages/pyngrok/ngrok.py</span> in <span class="ni">connect</span><span class="nt">(addr, proto, name, pyngrok_config, **options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">249</span>     <span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">250</span> 
-<span class="ne">--&gt; </span><span class="mi">251</span>     <span class="n">api_url</span> <span class="o">=</span> <span class="n">get_ngrok_process</span><span class="p">(</span><span class="n">pyngrok_config</span><span class="p">)</span><span class="o">.</span><span class="n">api_url</span>
-<span class="g g-Whitespace">    </span><span class="mi">252</span> 
-<span class="g g-Whitespace">    </span><span class="mi">253</span>     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating tunnel with options: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">options</span><span class="p">))</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">y_train</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">lr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">y_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span>
 
-<span class="nn">/usr/local/lib/python3.7/dist-packages/pyngrok/ngrok.py</span> in <span class="ni">get_ngrok_process</span><span class="nt">(pyngrok_config)</span>
-<span class="g g-Whitespace">    </span><span class="mi">160</span>     <span class="n">install_ngrok</span><span class="p">(</span><span class="n">pyngrok_config</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">161</span> 
-<span class="ne">--&gt; </span><span class="mi">162</span>     <span class="k">return</span> <span class="n">process</span><span class="o">.</span><span class="n">get_process</span><span class="p">(</span><span class="n">pyngrok_config</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">163</span> 
-<span class="g g-Whitespace">    </span><span class="mi">164</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test Accuracy </span><span class="si">{:.2f}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">acc</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Test Accuracy 83.61%
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="knn">
+<h1>KNN<a class="headerlink" href="#knn" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># n_neighbors means k</span>
+<span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">y_train</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
-<span class="nn">/usr/local/lib/python3.7/dist-packages/pyngrok/process.py</span> in <span class="ni">get_process</span><span class="nt">(pyngrok_config)</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span>         <span class="k">return</span> <span class="n">_current_processes</span><span class="p">[</span><span class="n">pyngrok_config</span><span class="o">.</span><span class="n">ngrok_path</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">294</span> 
-<span class="ne">--&gt; </span><span class="mi">295</span>     <span class="k">return</span> <span class="n">_start_process</span><span class="p">(</span><span class="n">pyngrok_config</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">296</span> 
-<span class="g g-Whitespace">    </span><span class="mi">297</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> NN Score: </span><span class="si">{:.2f}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">knn</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2 NN Score: 83.61%
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># mencoba mencari score knn terbaik dengan 20 kali coba</span>
+<span class="n">scoreList</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">knn2</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">i</span><span class="p">)</span>  <span class="c1"># n_neighbors means k</span>
+    <span class="n">knn2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">y_train</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">scoreList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">knn2</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+    
+<span class="c1"># plt.plot(range(1,20), scoreList)</span>
+<span class="c1"># plt.xticks(np.arange(1,20,1))</span>
+<span class="c1"># plt.xlabel(&quot;K value&quot;)</span>
+<span class="c1"># plt.ylabel(&quot;Score&quot;)</span>
+<span class="c1"># plt.show()</span>
 
-<span class="nn">/usr/local/lib/python3.7/dist-packages/pyngrok/process.py</span> in <span class="ni">_start_process</span><span class="nt">(pyngrok_config)</span>
-<span class="g g-Whitespace">    </span><span class="mi">464</span>             <span class="k">raise</span> <span class="n">PyngrokNgrokError</span><span class="p">(</span><span class="s2">&quot;The ngrok process errored on start: </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ngrok_process</span><span class="o">.</span><span class="n">startup_error</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">465</span>                                     <span class="n">ngrok_process</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span>
-<span class="ne">--&gt; </span><span class="mi">466</span>                                     <span class="n">ngrok_process</span><span class="o">.</span><span class="n">startup_error</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">467</span>         <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">468</span>             <span class="k">raise</span> <span class="n">PyngrokNgrokError</span><span class="p">(</span><span class="s2">&quot;The ngrok process was unable to start.&quot;</span><span class="p">,</span> <span class="n">ngrok_process</span><span class="o">.</span><span class="n">logs</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">scoreList</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span>
+<span class="n">accuracies</span><span class="p">[</span><span class="s1">&#39;KNN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum KNN Score is </span><span class="si">{:.2f}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">acc</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Maximum KNN Score is 90.16%
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="naive-bayes">
+<h1>Naive Bayes<a class="headerlink" href="#naive-bayes" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span>
+<span class="n">nb</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
+<span class="n">nb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">y_train</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
-<span class="ne">PyngrokNgrokError</span>: The ngrok process errored on start: Your account is limited to 1 simultaneous ngrok agent session.\nActive ngrok agent sessions in region &#39;us&#39;:\n  - ts_2HftEaSHPiI9mAZFB7e9dnGWvQm (35.221.150.132)\r\n\r\nERR_NGROK_108\r\n.
+<span class="n">acc</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">y_test</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span>
+<span class="n">accuracies</span><span class="p">[</span><span class="s1">&#39;Naive Bayes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy of Naive Bayes: </span><span class="si">{:.2f}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">acc</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy of Naive Bayes: 85.25%
 </pre></div>
 </div>
 </div>
